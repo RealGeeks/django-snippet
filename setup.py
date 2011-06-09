@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(
-	name = 'django-snippets',
+	name = 'django-snippet',
 	version = '1.0',
 	#packages = ['snippet',],
 	packages = find_packages(),

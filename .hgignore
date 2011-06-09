@@ -5,4 +5,4 @@ syntax: glob
 *.pyc
 build/*
 dist/*
-django_snippets.egg-info/*
+django_snippet.egg-info/*

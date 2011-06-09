@@ -5,7 +5,9 @@ from setuptools import setup, find_packages
 setup(
 	name = 'django-snippets',
 	version = '1.0',
+	#packages = ['snippet',],
 	packages = find_packages(),
+	include_package_data = True,
 	author = 'Shu Zong Chen',
 	author_email = 'shu.chen@freelancedreams.com',
 	description = 'Drop-in snippets for django project',

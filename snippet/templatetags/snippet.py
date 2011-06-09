@@ -1,5 +1,5 @@
 from django import template
-from realgeeksdotcom.snippet.models import Snippet
+from ..models import Snippet
 
 register = template.Library()
 

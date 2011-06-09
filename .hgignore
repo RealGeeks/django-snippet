@@ -3,3 +3,6 @@ syntax: glob
 
 *.swp
 *.pyc
+build/*
+dist/*
+django_snippets.egg-info/*

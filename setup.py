@@ -11,7 +11,7 @@ setup(
 	author = 'Shu Zong Chen',
 	author_email = 'shu.chen@freelancedreams.com',
 	description = 'Drop-in snippets for django project',
-	long_descriptions = \
+	long_description = \
 """
 Drop-in Snippets for Django
 

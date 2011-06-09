@@ -55,7 +55,7 @@ class snippet_block_node(template.Node):
 def snippetblock(parser, token):
 	args = token.split_contents()
 	if len(args) != 2:
-		raise template.TemplateSyntaxError("Snippet takes two arguments")
+		raise template.TemplateSyntaxError("Snippetblock takes two arguments")
 	name = args[1]
 	nodelist = parser.parse(('endsnippetblock',))
 	parser.delete_first_token()

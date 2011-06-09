@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.safestring import mark_safe
 from tinymce import models as tinymce_models
 
 # Create your models here.

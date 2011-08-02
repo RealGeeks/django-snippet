@@ -3,61 +3,62 @@ from ..models import Snippet
 
 register = template.Library()
 
+default_snippet = {
+		"default": '"New Snippet"',
+		"safe": True,
+}
+
 class snippet_node(template.Node):
 	def __init__(self, name, default):
 		self.name = template.Variable(name)
-		if default:
-			self.default = template.Variable(default)
-		else:
-			self.default = None
+		self.default = default
 	
 	def render(self, context):
 		name = self.name.resolve(context)
-		try:
-			snippet = Snippet.objects.get(name=name)
-		except Snippet.DoesNotExist:
-			if self.default:
-				default = self.default.resolve(context)
-			else:
-				default = "New Snippet"
-			snippet = Snippet.objects.create(name=name, content=default)
-			snippet.save()
-		return snippet.content
-		
+		default = self.default.render(context)
+		return Snippet.cache.get(name, default)
+
 @register.tag
 def snippet(parser, token):
-	args = token.split_contents()
-	if len(args) > 3:
-		raise template.TemplateSyntaxError("Snippet takes at most two arguments")
-	if len(args) > 2:
-		default = args[2]
-	else:
-		default = None
-	name = args[1]
+	args, kwargs = interpret_args(
+		token.split_contents(),
+		default=default_snippet,
+	)
+	default = fake_nodelist(kwargs['default'])
+	name = args[0]
 	return snippet_node(name, default)
-
-class snippet_block_node(template.Node):
-	def __init__(self, nodelist, name):
-		self.name = template.Variable(name)
-		self.nodelist = nodelist
-	
-	def render(self, context):
-		name = self.name.resolve(context)
-		try:
-			snippet = Snippet.objects.get(name=name)
-		except Snippet.DoesNotExist:
-			default = self.nodelist.render(context)
-			snippet = Snippet.objects.create(name=name, content=default)
-			snippet.save()
-		return snippet.content
 
 @register.tag
 def snippetblock(parser, token):
-	args = token.split_contents()
-	if len(args) != 2:
-		raise template.TemplateSyntaxError("Snippetblock takes two arguments")
-	name = args[1]
-	nodelist = parser.parse(('endsnippetblock',))
+	args, kwargs = interpret_args(
+		token.split_contents(),
+		default=default_snippet,
+	)
+	name = args[0]
+	default = parser.parse(('endsnippetblock',))
 	parser.delete_first_token()
-	return snippet_block_node(nodelist, name)
+	return snippet_node(name, default)
 
+def interpret_args(token_args, default):
+	args = []
+	kwargs = dict(default)
+	for token in token_args[1:]:
+		if '=' in token:
+			if token[0] in ('\'', '"'):
+				args.append(token)
+			else:
+				key, value = token.split('=',1)
+				if key in kwargs:
+					kwargs[key] = value
+		else:
+			args.append(token)
+	if not len(args):
+		raise template.TemplateSyntaxError("Snippetblock needs an ID")
+	return args, kwargs
+
+class fake_nodelist(object):
+	def __init__(self, content):
+		self.content = template.Variable(content)
+	
+	def render(self, context):
+		return self.content.resolve(context)

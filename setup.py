@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
 	name = 'django-snippet',
-	version = '1.0',
+	version = '1.0.1',
 	#packages = ['snippet',],
 	packages = find_packages(),
 	include_package_data = True,
@@ -41,7 +41,7 @@ Features:
     'Topic :: Software Development :: Libraries :: Python Modules',
 	],
 	platforms = ['any'],
-	url = 'https://bitbucket.org/sirpengi/django-snippets',
-	download_url = 'https://bitbucket.org/sirpengi/django-snippets/downloads',
+	url = 'https://bitbucket.org/sirpengi/django-snippet',
+	download_url = 'https://bitbucket.org/sirpengi/django-snippet/downloads',
 )
 

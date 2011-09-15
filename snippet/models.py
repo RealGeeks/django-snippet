@@ -5,7 +5,6 @@ from django.db.models.signals import post_save, post_delete
 
 class SnippetCache(object):
 	def __init__(self):
-		print "SnippetCache started"
 		self.reset()
 
 	def cache_key(self, name):
@@ -29,7 +28,6 @@ class SnippetCache(object):
 			return ret
 
 		try:
-			print "hitting db"
 			snippet = Snippet.objects.get(name=name)
 		except Snippet.DoesNotExist:
 			snippet = Snippet.objects.create(name=name, content=default)
